@@ -20,20 +20,20 @@ jobs:
 
       - name: Build Artifacts
         id: build
-        shell: julia --color=yes {0}
+        shell: julia {0}
         run: |
-          using Pkg: Pkg, Artifacts
+          using Pkg: Artifacts
           h = Artifacts.create_artifact() do dir
             download("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js", joinpath(dir, "MathJax.js"))
           end
           dh = Artifacts.archive_artifact(h, joinpath("_build", "mathjax.tar.gz"))
-          Artifacts.bind_artifact!("Artifacts.toml", "mathjax", h, force=true, download_info=[("https://github.com/mbauman/PlotlyKaleido.jl/releases/download/mathjax-2.7.9+0/mathjax.tar.gz", dh)])
+          Artifacts.bind_artifact!("Artifacts.toml", "mathjax", h, force=true, download_info=[("https://github.com/${{ github.repository }}/releases/download/mathjax-2.7.9+0/mathjax.tar.gz", dh)])
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           title: "Update mathjax artifact to v2.7.9"
-          body: "This is an automated pull request to update the mathjax artifact corresponding to the release https://github.com/mbauman/PlotlyKaleido.jl/releases/download/mathjax-2.7.9+0."
+          body: "This is an automated pull request to update the mathjax artifact corresponding to the release https://github.com/${{ github.repository }}/releases/tag/mathjax-2.7.9+0."
 
       - name: Create Release
         uses: ncipollo/release-action@v1
