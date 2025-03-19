@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       js:
-        description: 'Javascript file'
+        description: 'Javascript Resource'
         required: true
         type: choice
         options:
           - mathjax
           - plotly
       version:
-        description: 'Version number'
+        description: 'Version Number'
         required: true
         type: string
 
@@ -34,13 +34,15 @@ jobs:
         shell: julia --color=yes {0}
         run: |
           using Pkg: Artifacts
-          url = (mathjax = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/${{ inputs.version }}/MathJax.js",
-                 plotly = "https://cdn.plot.ly/plotly-${{ inputs.version }}.js").${{ inputs.js }}
+          js = ${{ inputs.js }}
+          ver = ${{ inputs.version}}
+          url = Dict("mathjax" => "https://cdnjs.cloudflare.com/ajax/libs/mathjax/$ver/MathJax.js",
+                     "plotly" => "https://cdn.plot.ly/plotly-$ver.js")[js]
           h = Artifacts.create_artifact() do dir
-            download(url, joinpath(dir, "{{ inputs.js }}.js"))
+            download(url, joinpath(dir, "$js.js"))
           end
-          dh = Artifacts.archive_artifact(h, joinpath("_build", "${{ inputs.js }}.tar.gz"))
-          Artifacts.bind_artifact!("Artifacts.toml", "${{ inputs.js }}", h, force=true, download_info=[("https://github.com/${{ github.repository }}/releases/download/mathjax-2.7.9+0/mathjax.tar.gz", dh)])
+          dh = Artifacts.archive_artifact(h, joinpath("_build", "$js.tar.gz"))
+          Artifacts.bind_artifact!("Artifacts.toml", js, h, force=true, download_info=[("https://github.com/${{ github.repository }}/releases/download/$js-$ver+0/$js.tar.gz", dh)])
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
