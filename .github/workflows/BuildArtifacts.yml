@@ -34,8 +34,8 @@ jobs:
         shell: julia --color=yes {0}
         run: |
           using Pkg: Artifacts
-          js = ${{ inputs.js }}
-          ver = ${{ inputs.version}}
+          js = "${{ inputs.js }}"
+          ver = "${{ inputs.version}}"
           url = Dict("mathjax" => "https://cdnjs.cloudflare.com/ajax/libs/mathjax/$ver/MathJax.js",
                      "plotly" => "https://cdn.plot.ly/plotly-$ver.js")[js]
           h = Artifacts.create_artifact() do dir
