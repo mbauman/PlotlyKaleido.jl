@@ -2,7 +2,18 @@ name: Build Artifacts
 
 on:
   workflow_dispatch:
-  # manually run
+    inputs:
+      js:
+        description: 'Javascript file'
+        required: true
+        type: choice
+        options:
+          - mathjax
+          - plotly
+      version:
+        description: 'Version number'
+        required: true
+        type: string
 
 permissions:
   contents: write
