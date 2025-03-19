@@ -39,7 +39,7 @@ jobs:
         shell: julia --color=yes {0}
         run: |
           using Pkg: Artifacts
-          js, ver, bld, repo = "${{ inputs.js }}", "${{ inputs.version}}", ${{ inputs.buildid }}, "{{ github.repository }}"
+          js, ver, bld, repo = "${{ inputs.js }}", "${{ inputs.version}}", ${{ inputs.buildid }}, "${{ github.repository }}"
           url = Dict("mathjax" => "https://cdnjs.cloudflare.com/ajax/libs/mathjax/$ver/MathJax.js",
                      "plotly" => "https://cdn.plot.ly/plotly-$ver.js")[js]
           h = Artifacts.create_artifact() do dir
@@ -47,7 +47,11 @@ jobs:
             download(url, joinpath(dir, "$js.js"))
           end
           dh = Artifacts.archive_artifact(h, joinpath("_build", "$js.tar.gz"))
-          Artifacts.bind_artifact!("Artifacts.toml", js, h, force=true, download_info=[("https://github.com/$repo/releases/download/$js-$ver+$bld/$js.tar.gz", dh)])
+          release_url = "https://github.com/$repo/releases/download/$js-$ver+$bld/$js.tar.gz"
+          Artifacts.bind_artifact!("Artifacts.toml", js, h, force=true, download_info=[(release_url, dh)])
+          @info """Success: artifact"$js" bound to $release_url"""
+          @info """  artifact"$js" -> $h"""
+          @info """  $js.tar.gz -> $dh"""
 
       - name: Create Release
         uses: ncipollo/release-action@v1
