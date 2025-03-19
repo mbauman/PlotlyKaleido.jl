@@ -14,3 +14,10 @@ os = "windows"
     [[Kaleido_fallback.download]]
     sha256 = "52bce20e749b9955ee4dd3b22fa44dbdc9a6c4a4d447e243d8c016d4b730d496"
     url = "https://github.com/JuliaBinaryWrappers/Kaleido_jll.jl/releases/download/Kaleido-v0.1.0+0/Kaleido.v0.1.0.x86_64-w64-mingw32.tar.gz"
+
+[mathjax]
+git-tree-sha1 = "3c7a51b9001b6a69e51e3205e9d8728420bfd0eb"
+
+    [[mathjax.download]]
+    sha256 = "93db56eb0d406ab1d8dd60c312064fba347319a3caee144251a7c5eeb01c371a"
+    url = "https://github.com/mbauman/PlotlyKaleido.jl/releases/download/mathjax-2.7.9+0/mathjax.tar.gz"
