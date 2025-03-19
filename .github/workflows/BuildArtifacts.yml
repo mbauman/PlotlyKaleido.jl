@@ -20,7 +20,7 @@ jobs:
 
       - name: Build Artifacts
         id: build
-        shell: julia
+        shell: julia --color=yes {0}
         run: |
           using Pkg: Pkg, Artifacts
           h = Artifacts.create_artifact() do dir
